@@ -13,3 +13,6 @@ dynamic = ["version"]
 
 [tool.setuptools.dynamic]
 version = {attr = "SimExporter.__version__"}
+
+[tool.setuptools.package-data]
+static = ["*.js", "*.txt"]
