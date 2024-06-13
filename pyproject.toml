@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "SimExporter"
+description = "SimExporter is a tool to export standalone HTML files containing 3D silmulation plots or animations."
+readme = "README.md"
+authors = [{name= "Robin ENJALBERT"}]
+requires-python = ">=3.10"
+dependencies = ["numpy >= 1.26.4", "k3d >= 2.16.1"]
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = {attr = "SimExporter.__version__"}
