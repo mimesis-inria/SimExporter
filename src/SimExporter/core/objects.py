@@ -1,16 +1,16 @@
-from typing import Optional
+from typing import Optional, List
 from numpy import ndarray, float32, float64
 import k3d
-from vedo import Mesh, Plotter
+from vedo import Mesh
 from colour import Color
 
 
 class Objects:
 
-    def __init__(self, plt: k3d.Plot):
+    def __init__(self, plt: k3d.Plot, time_series: List):
 
-        self._objects = []
-        self._plt = plt
+        self.__plt = plt
+        self.__time_series = time_series
 
     def add_mesh(self,
                  positions: ndarray,
@@ -29,12 +29,12 @@ class Objects:
                                  opacity=alpha,
                                  wireframe=wireframe,
                                  flat_shading=flat_shading)
+        self.__plt += mesh
+
         if animation is not None:
             if animation.dtype == float64:
                 animation = animation.astype(float32)
-            mesh.vertices = {str(i): pos for i, pos in enumerate(animation)}
-
-        self._plt += mesh
+            self.__time_series.append([mesh, 'mesh', animation])
 
     def add_points(self,
                    positions: ndarray,
@@ -48,9 +48,9 @@ class Objects:
                             opacity=alpha,
                             point_size=point_size,
                             shader='3d')
+        self.__plt += points
+
         if animation is not None:
             if animation.dtype == float64:
                 animation = animation.astype(float32)
-            points.positions = {str(i): pos for i, pos in enumerate(animation)}
-
-        self._plt += points
+            self.__time_series.append([points, 'points', animation])

@@ -11,8 +11,9 @@ class Exporter:
 
     def __init__(self):
 
-        self._plt = k3d.Plot(camera_mode='orbit', lighting=1.)
-        self.objects = Objects(plt=self._plt)
+        self.__plt = k3d.Plot(camera_mode='orbit', lighting=1.)
+        self.__time_series = []
+        self.objects = Objects(plt=self.__plt, time_series=self.__time_series)
 
     def export_scene(self,
                      filename: str,
@@ -31,8 +32,8 @@ class Exporter:
             content = content.replace('[FFLATE_JS]', file.read())
         content = content.replace('[ADDITIONAL]', '')
 
-        snapshot = self._plt.get_binary_snapshot_objects()
-        plot_params = self._plt.get_plot_params()
+        snapshot = self.__plt.get_binary_snapshot_objects()
+        plot_params = self.__plt.get_plot_params()
         plot_params['menuVisibility'] = menu_visible
         plot_params['gridVisible'] = grid_visible
         plot_params['axesHelper'] = 1. if frame_visible else 0.
@@ -45,6 +46,20 @@ class Exporter:
         with open(filename, 'w') as file:
             file.write(content)
 
-    def export_animation(self) -> None:
+    def export_animation(self,
+                         filename: str,
+                         grid_visible: bool = False,
+                         menu_visible: bool = False,
+                         frame_visible: bool = True) -> None:
 
-        pass
+        # Set the time series
+        for (obj, obj_type, time_series) in self.__time_series:
+            if obj_type == 'mesh':
+                obj.vertices = {str(i): t for i, t in enumerate(time_series)}
+            elif obj_type == 'points':
+                obj.positions = {str(i): t for i, t in enumerate(time_series)}
+
+        self.export_scene(filename=filename,
+                          grid_visible=grid_visible,
+                          menu_visible=menu_visible,
+                          frame_visible=frame_visible)
