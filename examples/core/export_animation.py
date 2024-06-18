@@ -1,7 +1,7 @@
 from vedo import Mesh
 import numpy as np
 
-from SimExporter.core.exporter import Exporter
+from SimExporter.core import Exporter
 
 
 heart = Mesh('heart.obj').scale(0.001)

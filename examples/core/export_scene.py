@@ -1,6 +1,6 @@
 import numpy as np
 
-from SimExporter.core.exporter import Exporter
+from SimExporter.core import Exporter
 
 
 exporter = Exporter()
