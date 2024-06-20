@@ -60,18 +60,27 @@ class Factory:
                    color: Union[str, List] = 'salmon',
                    alpha: float = 1.,
                    point_size: int = 0.1,
-                   time_positions: Optional[ndarray] = None) -> None:
+                   colormap_name: str = 'jet',
+                   colormap_range: Optional[List[int]] = None,
+                   colormap_values: Optional[ndarray] = None,
+                   time_positions: Optional[ndarray] = None,
+                   time_colormaps: Optional[ndarray] = None) -> None:
 
-        points = k3d.points(positions=positions.astype(float32),
+        points = obj.points(positions=positions.astype(float32),
                             color=convert_color(color),
                             opacity=alpha,
                             point_size=point_size,
-                            shader='3d')
+                            colormap_name=colormap_name,
+                            colormap_range=colormap_range,
+                            colormap_values=colormap_values,
+                            time_colormaps=time_colormaps)
         self.__plt += points
 
         if self.__animation:
             if time_positions is not None:
                 points.positions = {str(i): t for i, t in enumerate(time_positions.astype(float32))}
+            if time_colormaps is not None:
+                points.attribute = {str(i): t for i, t in enumerate(time_colormaps.astype(float32))}
 
     def add_arrows(self,
                    positions: ndarray,
