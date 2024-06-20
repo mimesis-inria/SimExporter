@@ -3,6 +3,7 @@ from vedo import Mesh
 from SimExporter.core import Exporter
 
 
+# Load the data and create tetra mesh
 mesh = Mesh('heart.obj')
 tetra = mesh.clone().tetralize(side=0.05)
 
@@ -27,4 +28,3 @@ exporter.process(filename='tetra.html',
                  menu_visible=True,
                  grid_visible=False,
                  frame_visible=True)
-

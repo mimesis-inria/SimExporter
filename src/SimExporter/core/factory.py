@@ -88,3 +88,8 @@ class Factory:
                 arrows.origins = {str(i): t for i, t in enumerate(time_positions.astype(float32))}
             if time_vectors is not None:
                 arrows.vectors = {str(i): t for i, t in enumerate(time_vectors.astype(float32) * scale)}
+
+    def add_k3d_objects(self, *objs):
+
+        for o in objs:
+            self.__plt += o

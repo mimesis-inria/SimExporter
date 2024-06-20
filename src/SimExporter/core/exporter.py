@@ -20,8 +20,8 @@ class Exporter:
     def process(self,
                 filename: str,
                 background_color: Union[str, List] = 'white',
-                grid_visible: bool = False,
-                menu_visible: bool = False,
+                grid_visible: bool = True,
+                menu_visible: bool = True,
                 frame_visible: bool = True) -> None:
 
         self.__plt.background_color = convert_color(background_color)
