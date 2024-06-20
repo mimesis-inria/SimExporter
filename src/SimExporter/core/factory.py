@@ -1,7 +1,6 @@
 from typing import Optional, List, Union
 from numpy import ndarray, float32
 import k3d
-from vedo import Mesh
 from colour import Color
 
 from SimExporter.core import objects as obj
@@ -32,21 +31,29 @@ class Factory:
                  alpha: float = 1.,
                  wireframe: bool = False,
                  flat_shading: bool = True,
-                 time_positions: Optional[ndarray] = None) -> None:
+                 colormap_name: str = 'jet',
+                 colormap_range: Optional[List[int]] = None,
+                 colormap_values: Optional[ndarray] = None,
+                 time_positions: Optional[ndarray] = None,
+                 time_colormaps: Optional[ndarray] = None) -> None:
 
-        # Create a temporary Vedo mesh to get vtkPolyData as k3d.Mesh objects only accept triangle cells
-        poly_mesh = Mesh([positions, cells])
-
-        mesh = k3d.vtk_poly_data(poly_data=poly_mesh.dataset,
-                                 color=convert_color(color),
-                                 opacity=alpha,
-                                 wireframe=wireframe,
-                                 flat_shading=flat_shading)
+        mesh = obj.mesh(positions=positions,
+                        cells=cells,
+                        color=convert_color(color),
+                        opacity=alpha,
+                        wireframe=wireframe,
+                        flat_shading=flat_shading,
+                        colormap_name=colormap_name,
+                        colormap_range=colormap_range,
+                        colormap_values=colormap_values,
+                        time_colormaps=time_colormaps)
         self.__plt += mesh
 
         if self.__animation:
             if time_positions is not None:
                 mesh.vertices = {str(i): t for i, t in enumerate(time_positions.astype(float32))}
+            if time_colormaps is not None:
+                mesh.attribute = {str(i): t for i, t in enumerate(time_colormaps.astype(float32))}
 
     def add_points(self,
                    positions: ndarray,

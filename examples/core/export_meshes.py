@@ -1,4 +1,5 @@
-from numpy import load
+from numpy import load, mean
+from numpy.linalg import norm
 from vedo import Mesh
 
 from SimExporter.core import Exporter
@@ -27,6 +28,9 @@ exporter.objects.add_mesh(positions=vessel.vertices,
                           alpha=1.,
                           flat_shading=False,
                           wireframe=True,
+                          colormap_name='Reds',
+                          colormap_range=[0, 1],
+                          time_colormaps=norm(vessel_positions - mean(vessel_positions, axis=0), axis=2),
                           time_positions=vessel_positions)
 
 # Export to HTML
