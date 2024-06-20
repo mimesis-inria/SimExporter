@@ -1,25 +1,30 @@
+from typing import List, Union
 from os.path import join, dirname
 import k3d
 from base64 import b64encode
 from zlib import compress
 from msgpack import packb
 
-from SimExporter.core.objects import Objects
+from SimExporter.core.factory import Factory, convert_color
 
 
 class Exporter:
 
-    def __init__(self):
+    def __init__(self, animation: bool = False, fps: float = 25.):
 
-        self.__plt = k3d.Plot(camera_mode='orbit', lighting=1.)
-        self.__time_series = []
-        self.objects = Objects(plt=self.__plt, time_series=self.__time_series)
+        self.__plt = k3d.Plot(camera_mode='orbit', lighting=1., fps=fps)
+        self.__animation = animation
 
-    def export_scene(self,
-                     filename: str,
-                     grid_visible: bool = False,
-                     menu_visible: bool = False,
-                     frame_visible: bool = True) -> None:
+        self.objects = Factory(plt=self.__plt, animation=self.__animation)
+
+    def process(self,
+                filename: str,
+                background_color: Union[str, List] = 'white',
+                grid_visible: bool = False,
+                menu_visible: bool = False,
+                frame_visible: bool = True) -> None:
+
+        self.__plt.background_color = convert_color(background_color)
 
         static_dir = join(dirname(dirname(__file__)), 'static')
         with open(join(static_dir, 'snapshot_standalone.txt'), 'r') as file:
@@ -45,21 +50,3 @@ class Exporter:
         filename = f'{filename}.html' if not filename.endswith('.html') else filename
         with open(filename, 'w') as file:
             file.write(content)
-
-    def export_animation(self,
-                         filename: str,
-                         grid_visible: bool = False,
-                         menu_visible: bool = False,
-                         frame_visible: bool = True) -> None:
-
-        # Set the time series
-        for (obj, obj_type, time_series) in self.__time_series:
-            if obj_type == 'mesh':
-                obj.vertices = {str(i): t for i, t in enumerate(time_series)}
-            elif obj_type == 'points':
-                obj.positions = {str(i): t for i, t in enumerate(time_series)}
-
-        self.export_scene(filename=filename,
-                          grid_visible=grid_visible,
-                          menu_visible=menu_visible,
-                          frame_visible=frame_visible)
