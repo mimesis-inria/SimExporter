@@ -1,0 +1,21 @@
+site_name: SimExporter
+
+nav:
+  - Home: index.md
+  - Install: install.md
+  - How to use: usage.md
+  - About: about.md
+  - API: api.md
+
+theme:
+  name: material
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: sphinx
+
+extra_css:
+  - _static/css/mkdocstrings.css
