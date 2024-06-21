@@ -14,8 +14,6 @@ exporter = Exporter(animation=True,
                     fps=30)
 ```
 
-::: SimExporter.core.exporter.Exporter.__init__
-
 The `animation` option defines if the exported output will be a static 3D plot or an animation (in that case, the frame
 rate `fps` can be specified).
 
