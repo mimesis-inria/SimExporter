@@ -1,9 +1,8 @@
 from typing import Optional, List
-import numpy as np
 from numpy import ndarray, array, float32, zeros_like
 import k3d
-from k3d.objects import Vectors, TimeSeries, Array
 from k3d.helpers import array_serialization_wrap
+from k3d.transform import process_transform_arguments
 from vedo import Mesh, Points
 
 
@@ -137,7 +136,7 @@ def vectors(origins,
             vecs,
             color,
             head_size,
-            line_width) -> Vectors:
+            line_width) -> k3d.objects.Vectors:
     """
     Create a new Vectors object.
 
@@ -148,21 +147,24 @@ def vectors(origins,
     :param line_width: Width of the vectors.
     """
 
-    class _Vectors(Vectors):
-        origins = TimeSeries(Array(dtype=np.float32)).tag(sync=True, **array_serialization_wrap('origins'))
-        vectors = TimeSeries(Array(dtype=np.float32)).tag(sync=True, **array_serialization_wrap('vectors'))
+    TimeSeries, Array = k3d.objects.TimeSeries, k3d.objects.Array
 
-    return _Vectors(vectors=vecs if vecs is not None else origins,
-                    origins=origins if vecs is not None else np.zeros_like(vecs),
-                    colors=[],
-                    origin_color=color,
-                    head_color=color,
-                    use_head=True,
-                    head_size=head_size,
-                    labels=[],
-                    label_size=1.0,
-                    line_width=line_width,
-                    name=None,
-                    group=None,
-                    custom_data=None,
-                    compression_level=0)
+    class Vectors(k3d.objects.Vectors):
+        origins = TimeSeries(Array(dtype=float32)).tag(sync=True, **array_serialization_wrap('origins'))
+        vectors = TimeSeries(Array(dtype=float32)).tag(sync=True, **array_serialization_wrap('vectors'))
+
+    return process_transform_arguments(
+        Vectors(vectors=vecs if vecs is not None else origins,
+                origins=origins if vecs is not None else zeros_like(vecs),
+                colors=[],
+                origin_color=color,
+                head_color=color,
+                use_head=True,
+                head_size=head_size,
+                labels=[],
+                label_size=1.0,
+                line_width=line_width,
+                name=None,
+                group=None,
+                custom_data=None,
+                compression_level=0))

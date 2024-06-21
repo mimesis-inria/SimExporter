@@ -173,11 +173,11 @@ class Factory:
         self.__plt += arrows
 
         # Associate time series if animation
-        # if self.__animation:
-        #     if time_positions is not None:
-        #         arrows.origins = {str(i): t for i, t in enumerate(time_positions.astype(float32))}
-        #     if time_vectors is not None:
-        #         arrows.vectors = {str(i): t for i, t in enumerate(time_vectors.astype(float32) * scale)}
+        if self.__animation:
+            if time_positions is not None:
+                arrows.origins = {str(i): t for i, t in enumerate(time_positions.astype(float32))}
+            if time_vectors is not None:
+                arrows.vectors = {str(i): t for i, t in enumerate(time_vectors.astype(float32) * scale)}
 
     def add_k3d_objects(self, *objs) -> None:
         """
