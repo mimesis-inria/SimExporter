@@ -16,7 +16,7 @@ This HTML file can then be opened in any browsers on any laptop, is can then be 
 
 See the interactive gallery in the [**documentation**]() !
 
-![gallery](docs/gallery.png)
+![gallery](docs/src/_static/gallery.png)
 
 
 ## Install
