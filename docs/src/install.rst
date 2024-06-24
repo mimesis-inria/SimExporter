@@ -29,7 +29,7 @@ Install
 Install with *pip*
 """"""""""""""""""
 
-**SimExporter** can be easily installed with pip for users:
+**SimExporter** can be easily installed with :guilabel:`pip` for users:
 
 .. code-block:: bash
 
@@ -49,7 +49,7 @@ Install from sources
 
 .. code-block:: bash
 
-    git clone git+https://github.com/RobinEnjalbert/SimExporter.git
+    git clone https://github.com/RobinEnjalbert/SimExporter.git
     cd SimExporter
     pip install -e .
 
