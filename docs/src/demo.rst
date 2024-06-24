@@ -4,7 +4,7 @@ Demo
 
 .. raw:: html
 
-    <iframe src="_static/meshes.html" height="600px" width="100%"></iframe>
+    <iframe src="_static/html/meshes.html" height="600px" width="100%"></iframe>
 
 .. code-block:: python
 
