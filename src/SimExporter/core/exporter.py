@@ -48,13 +48,13 @@ class Exporter:
 
         # Get the directory that contains the javascript files and fill the standalone snapshot
         static_dir = join(dirname(dirname(__file__)), 'static')
-        with open(join(static_dir, 'snapshot_standalone.txt'), 'r') as file:
+        with open(join(static_dir, 'snapshot_standalone.txt'), 'r', encoding='utf-8') as file:
             content = file.read()
-        with open(join(static_dir, 'standalone.js'), 'r') as file:
+        with open(join(static_dir, 'standalone.js'), 'r', encoding='utf-8') as file:
             content = content.replace('[K3D_SOURCE]', b64encode(compress(file.read().encode())).decode('utf-8'))
-        with open(join(static_dir, 'require.js'), 'r') as file:
+        with open(join(static_dir, 'require.js'), 'r', encoding='utf-8') as file:
             content = content.replace('[REQUIRE_JS]', file.read())
-        with open(join(static_dir, 'fflate.js'), 'r') as file:
+        with open(join(static_dir, 'fflate.js'), 'r', encoding='utf-8') as file:
             content = content.replace('[FFLATE_JS]', file.read())
         content = content.replace('[ADDITIONAL]', '')
 
@@ -74,5 +74,5 @@ class Exporter:
 
         # Write in the HTML file
         filename = f'{filename}.html' if not filename.endswith('.html') else filename
-        with open(filename, 'w') as file:
+        with open(filename, 'w', encoding='utf-8') as file:
             file.write(content)
