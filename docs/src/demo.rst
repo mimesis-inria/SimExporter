@@ -31,7 +31,7 @@ Demo
                               wireframe=True,
                               colormap_name='Reds',
                               colormap_range=[0, 1],
-                              time_colormaps=...,
+                              time_colormap_values=...,
                               time_positions=...)
 
     # Export to HTML
