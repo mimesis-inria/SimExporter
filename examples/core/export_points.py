@@ -23,7 +23,7 @@ exporter.objects.add_mesh(positions=heart.vertices,
 exporter.objects.add_points(positions=heart.vertices,
                             point_size=2,
                             colormap_name='YlOrBr',
-                            time_colormaps=norm(heart_positions - mean(heart_positions, axis=0), axis=2),
+                            time_colormap_values=norm(heart_positions - mean(heart_positions, axis=0), axis=2),
                             time_positions=heart_positions)
 
 # Export to HTML

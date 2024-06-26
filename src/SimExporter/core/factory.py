@@ -55,7 +55,7 @@ class Factory:
                  colormap_range: Optional[List[int]] = None,
                  colormap_values: Optional[ndarray] = None,
                  time_positions: Optional[ndarray] = None,
-                 time_colormaps: Optional[ndarray] = None) -> None:
+                 time_colormap_values: Optional[ndarray] = None) -> None:
         """
         Create a new Mesh object.
 
@@ -70,7 +70,7 @@ class Factory:
         :param colormap_range: Range of the color map.
         :param colormap_values: Scalar values to color the mesh regarding the color map.
         :param time_positions: Time series array for the positions.
-        :param time_colormaps: Time series array for the color map scalar values.
+        :param time_colormap_values: Time series array for the color map scalar values.
         """
 
         # Create the mesh
@@ -83,7 +83,7 @@ class Factory:
                         colormap_name=colormap_name,
                         colormap_range=colormap_range,
                         colormap_values=colormap_values,
-                        time_colormaps=time_colormaps)
+                        time_colormaps=time_colormap_values)
 
         # Add to the plotter
         self.__plt += mesh
@@ -92,8 +92,8 @@ class Factory:
         if self.__animation:
             if time_positions is not None:
                 mesh.vertices = {str(i): t for i, t in enumerate(time_positions.astype(float32))}
-            if time_colormaps is not None:
-                mesh.attribute = {str(i): t for i, t in enumerate(time_colormaps.astype(float32))}
+            if time_colormap_values is not None:
+                mesh.attribute = {str(i): t for i, t in enumerate(time_colormap_values.astype(float32))}
 
     def add_points(self,
                    positions: ndarray,
@@ -104,7 +104,7 @@ class Factory:
                    colormap_range: Optional[List[int]] = None,
                    colormap_values: Optional[ndarray] = None,
                    time_positions: Optional[ndarray] = None,
-                   time_colormaps: Optional[ndarray] = None) -> None:
+                   time_colormap_values: Optional[ndarray] = None) -> None:
         """
         Create a new Points object.
 
@@ -117,7 +117,7 @@ class Factory:
         :param colormap_range: Range of the color map.
         :param colormap_values: Scalar values to color the points regarding the color map.
         :param time_positions: Times series array for the positions.
-        :param time_colormaps: Time series array for the color map scalar values.
+        :param time_colormap_values: Time series array for the color map scalar values.
         """
 
         # Create the points
@@ -128,7 +128,7 @@ class Factory:
                             colormap_name=colormap_name,
                             colormap_range=colormap_range,
                             colormap_values=colormap_values,
-                            time_colormaps=time_colormaps)
+                            time_colormaps=time_colormap_values)
 
         # Add to the plotter
         self.__plt += points
@@ -137,8 +137,8 @@ class Factory:
         if self.__animation:
             if time_positions is not None:
                 points.positions = {str(i): t for i, t in enumerate(time_positions.astype(float32))}
-            if time_colormaps is not None:
-                points.attribute = {str(i): t for i, t in enumerate(time_colormaps.astype(float32))}
+            if time_colormap_values is not None:
+                points.attribute = {str(i): t for i, t in enumerate(time_colormap_values.astype(float32))}
 
     def add_arrows(self,
                    positions: ndarray,

@@ -19,13 +19,11 @@ class Exporter:
         :param fps: Frame rate of the animation (not used if animation = False).
         """
 
-        self.__animation = animation
-
         # Create a plotter to render the 3D objects
-        self.__plt = Plot(camera_mode='orbit', lighting=1., fps=fps)
+        self._plt = Plot(fps=fps, camera_rotate_speed=5.)
 
         # Create a factory to easily add 3D objects in the scene
-        self.objects = Factory(plt=self.__plt, animation=self.__animation)
+        self.objects = Factory(plt=self._plt, animation=animation)
 
     def process(self,
                 filename: str,
@@ -44,7 +42,7 @@ class Exporter:
         """
 
         # Set the background color
-        self.__plt.background_color = convert_color(background_color)
+        self._plt.background_color = convert_color(background_color)
 
         # Get the directory that contains the javascript files and fill the standalone snapshot
         static_dir = join(dirname(dirname(__file__)), 'static')
@@ -59,10 +57,10 @@ class Exporter:
         content = content.replace('[ADDITIONAL]', '')
 
         # Get the scene snapshot
-        snapshot = self.__plt.get_binary_snapshot_objects()
+        snapshot = self._plt.get_binary_snapshot_objects()
 
         # Update the plot parameters with the options
-        plot_params = self.__plt.get_plot_params()
+        plot_params = self._plt.get_plot_params()
         plot_params['menuVisibility'] = menu_visible
         plot_params['gridVisible'] = grid_visible
         plot_params['axesHelper'] = 1. if frame_visible else 0.

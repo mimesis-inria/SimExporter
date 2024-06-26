@@ -30,7 +30,7 @@ exporter.objects.add_mesh(positions=vessel.vertices,
                           wireframe=True,
                           colormap_name='Reds',
                           colormap_range=[0, 1],
-                          time_colormaps=norm(vessel_positions - mean(vessel_positions, axis=0), axis=2),
+                          time_colormap_values=norm(vessel_positions - mean(vessel_positions, axis=0), axis=2),
                           time_positions=vessel_positions)
 
 # Export to HTML
