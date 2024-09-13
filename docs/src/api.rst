@@ -4,7 +4,7 @@ API
 
 .. autoclass:: SimExporter.core.exporter.Exporter
     :special-members: __init__
-    :members: process
+    :members: to_html
 
 
 .. autoclass:: SimExporter.core.factory.Factory

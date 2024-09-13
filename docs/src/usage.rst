@@ -60,8 +60,18 @@ The **Exporter** exposes the methods to create several 3D objects in the :guilab
 Step 3: Export in HTML
 ----------------------
 
-Finally, the call to :py:meth:`process<SimExporter.core.exporter.Exporter.process>` will export the 3D scene in HTML:
+Finally, the call to :py:meth:`to_html<SimExporter.core.exporter.Exporter.to_html>` will export the 3D scene in HTML:
 
 .. code-block:: python
 
-    exporter.process(filename='scene.html')
+    exporter.to_html(filename='scene.html')
+
+
+Step 4: Include in a webpage
+----------------------------
+
+To include an exported animation, you can simply use an **HTML Iframe**:
+
+.. code-block:: html
+
+    <iframe src="animation.html" height="600px" width="100%"></iframe>

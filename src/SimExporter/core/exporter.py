@@ -1,5 +1,6 @@
 from typing import List, Union
-from os.path import join, dirname
+from os import makedirs
+from os.path import join, dirname, exists
 from k3d import Plot
 from base64 import b64encode
 from zlib import compress
@@ -25,7 +26,21 @@ class Exporter:
         # Create a factory to easily add 3D objects in the scene
         self.objects = Factory(plt=self._plt, animation=animation)
 
-    def process(self,
+    def set_camera(self,
+                   factor: float = 1.,
+                   yaw: float = 0.,
+                   pitch: float = 0.) -> None:
+        """
+        Change the default camera parameters.
+
+        :param factor: Distance factor to the objects.
+        :param yaw: Yaw to apply on the objects.
+        :param pitch: Pitch to apply on the objects.
+        """
+
+        self._plt.camera = self._plt.get_auto_camera(factor=factor, yaw=yaw, pitch=pitch)
+
+    def to_html(self,
                 filename: str,
                 background_color: Union[str, List] = 'white',
                 grid_visible: bool = True,
@@ -72,5 +87,7 @@ class Exporter:
 
         # Write in the HTML file
         filename = f'{filename}.html' if not filename.endswith('.html') else filename
+        if dirname(filename) != '' and not exists(dirname(filename)):
+            makedirs(dirname(filename))
         with open(filename, 'w', encoding='utf-8') as file:
             file.write(content)

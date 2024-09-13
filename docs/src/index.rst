@@ -2,11 +2,13 @@
 SimExporter
 ===========
 
-**SimExporter** is a Python module for creating 3D scenes of various 3D objects using
-:K3D:`K3D <>` and exporting a 3D plot or a 3D animation in a standalone HTML file.
+**SimExporter** is a Python module for creating **3D interactive scenes** of various 3D objects using
+:K3D:`K3D <>` and exporting a **3D plot** or a **3D animation** in a standalone HTML file.
 
-This HTML file can then be opened in any browsers on any laptop, is can then be easily integrated into a website or
+This HTML file can then be shared and opened in any browsers and laptop, it can also be easily integrated into a website or
 presentation slides.
+
+.. image:: _static/gallery.gif
 
 
 Features
@@ -27,6 +29,10 @@ Gallery
 -------
 
 .. image:: _static/gallery.png
+
+Try an integrated animation on our `team website <https://mimesis.inria.fr/>`_ !
+
+.. image:: _static/mimesis_website.gif
 
 
 

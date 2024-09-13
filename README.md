@@ -1,22 +1,28 @@
 # SimExporter
 
-A small **python** tool to **export standalone 3D animations** in **HTML files** using K3D.
+A small **python** tool to **export standalone 3D interactive animations** in **HTML files** using K3D.
+
+![gallery](docs/src/_static/gallery.gif)
 
 
 ## Presentation
 
-**SimExporter** is a Python module for creating **3D scenes** of various 3D objects using 
+**SimExporter** is a Python module for creating **3D interactive scenes** of various 3D objects using 
 [**K3D**](http://www.k3d-jupyter.org/) and exporting a **3D plot** or a **3D animation** in a **standalone HTML file**.
 
-This HTML file can then be opened in any browsers on any laptop, is can then be easily integrated into a **website** or 
-**presentation slides**.
+This HTML file can then be shared and opened in any browsers and laptop, it can also be easily integrated into a
+**website** or **presentation slides**.
 
 
 ## Gallery
 
-See the interactive gallery in the [**documentation**]() !
+See the interactive gallery in the [**documentation**](https://robinenjalbert.github.io/SimExporter/) !
 
 ![gallery](docs/src/_static/gallery.png)
+
+Try an integrated animation on our [**team website**](https://mimesis.inria.fr/) !
+
+![gallery](docs/src/_static/mimesis_website.gif)
 
 
 ## Install
@@ -48,7 +54,7 @@ exporter.objects.add_mesh(positions=...,
                           cells=...)
 
 # Export the scene to an HTML file
-exporter.process(filename='scene.html')
+exporter.to_html(filename='scene.html')
 ```
 
 The code below is the minimum for exporting a **3D animation** with various objects to a **standalone HTML file**:
@@ -67,13 +73,13 @@ exporter.objects.add_mesh(positions=...,
                           time_positions=...)
 
 # Export the animation to an HTML file
-exporter.process(filename='animation.html')                          
+exporter.to_html(filename='animation.html')                          
 ```
 
 To integrate the HTML file into a website or presentation slides, see the dedicated section in the 
-[**documentation**]().
+[**documentation**](https://robinenjalbert.github.io/SimExporter/).
 
 
 ## Documentation
 
-Just in case you missed it ⟶ [**documentation**]()
+See more ⟶ [**documentation**](https://robinenjalbert.github.io/SimExporter/)

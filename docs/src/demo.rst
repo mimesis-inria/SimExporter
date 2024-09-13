@@ -50,7 +50,7 @@ Demo
                                       time_positions=...)
 
             # Export to HTML
-            exporter.process(filename='scene.html',
+            exporter.to_html(filename='scene.html',
                              background_color='black',
                              menu_visible=True,
                              grid_visible=False,
@@ -84,7 +84,7 @@ Demo
                                       time_positions=...)
 
             # Export to HTML
-            exporter.process(filename='scene.html',
+            exporter.to_html(filename='scene.html',
                              background_color='black',
                              menu_visible=True,
                              grid_visible=False,

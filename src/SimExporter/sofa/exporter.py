@@ -1,4 +1,4 @@
-from typing import Optional, Union, List
+from typing import Optional, Union, List, Dict
 
 import Sofa
 
@@ -27,7 +27,25 @@ class Exporter(_Exporter):
         self.objects = Factory(recorder=self.__recorder, plt=self._plt, animation=animation)
         self.dt = dt
 
-    def process(self,
+        # Camera variable (the parent's set_camera method won't work as objects are added to plotter at export)
+        self.__camera_parameters: Optional[Dict] = None
+
+    def set_camera(self,
+                   factor: float = 1.,
+                   yaw: float = 0.,
+                   pitch: float = 0.) -> None:
+        """
+        Change the default camera parameters.
+
+        :param factor: Distance factor to the objects.
+        :param yaw: Yaw to apply on the objects.
+        :param pitch: Pitch to apply on the objects.
+        """
+
+        self.__camera_parameters = locals()
+        del self.__camera_parameters['self']
+
+    def to_html(self,
                 filename: str,
                 background_color: Union[str, List] = 'white',
                 grid_visible: bool = True,
@@ -46,9 +64,10 @@ class Exporter(_Exporter):
         # Add the sofa objects to the scene
         self.__recorder.process(factory=self.objects)
 
+        # Set default camera
+        if self.__camera_parameters is not None:
+            super().set_camera(**self.__camera_parameters)
+
         # Export HTML file
-        super().process(filename=filename,
-                        background_color=background_color,
-                        grid_visible=grid_visible,
-                        menu_visible=menu_visible,
-                        frame_visible=frame_visible)
+        super().to_html(filename=filename, background_color=background_color, grid_visible=grid_visible,
+                        menu_visible=menu_visible, frame_visible=frame_visible)
