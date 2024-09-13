@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SimExporter.core.exporter &mdash; SimExporter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=a5c4661c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/theme.css?v=556d74e5" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../../_static/copybutton.js?v=f281be69"></script>
+        <script src="../../../_static/tabs.js?v=3030b3cb"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            SimExporter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../demo.html">Demo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">How to use</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SimExporter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">SimExporter.core.exporter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SimExporter.core.exporter</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">makedirs</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">exists</span>
+<span class="kn">from</span> <span class="nn">k3d</span> <span class="kn">import</span> <span class="n">Plot</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
+<span class="kn">from</span> <span class="nn">zlib</span> <span class="kn">import</span> <span class="n">compress</span>
+<span class="kn">from</span> <span class="nn">msgpack</span> <span class="kn">import</span> <span class="n">packb</span>
+
+<span class="kn">from</span> <span class="nn">SimExporter.core.factory</span> <span class="kn">import</span> <span class="n">Factory</span><span class="p">,</span> <span class="n">convert_color</span>
+
+
+<div class="viewcode-block" id="Exporter">
+<a class="viewcode-back" href="../../../api.html#SimExporter.core.exporter.Exporter">[docs]</a>
+<span class="k">class</span> <span class="nc">Exporter</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Exporter.__init__">
+<a class="viewcode-back" href="../../../api.html#SimExporter.core.exporter.Exporter.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">animation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">fps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">25.</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Main API to create a scene with 3D objects and export a standalone 3D plot or animation in an HTML file.</span>
+
+<span class="sd">        :param animation: If False, a static 3D plot is exported. If True, a 3D animation is exported if time series</span>
+<span class="sd">                          are associated to a 3D object.</span>
+<span class="sd">        :param fps: Frame rate of the animation (not used if animation = False).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Create a plotter to render the 3D objects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plt</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span><span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">,</span> <span class="n">camera_rotate_speed</span><span class="o">=</span><span class="mf">5.</span><span class="p">)</span>
+
+        <span class="c1"># Create a factory to easily add 3D objects in the scene</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">objects</span> <span class="o">=</span> <span class="n">Factory</span><span class="p">(</span><span class="n">plt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_plt</span><span class="p">,</span> <span class="n">animation</span><span class="o">=</span><span class="n">animation</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">set_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                   <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span>
+                   <span class="n">yaw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
+                   <span class="n">pitch</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change the default camera parameters.</span>
+
+<span class="sd">        :param factor: Distance factor to the objects.</span>
+<span class="sd">        :param yaw: Yaw to apply on the objects.</span>
+<span class="sd">        :param pitch: Pitch to apply on the objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plt</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plt</span><span class="o">.</span><span class="n">get_auto_camera</span><span class="p">(</span><span class="n">factor</span><span class="o">=</span><span class="n">factor</span><span class="p">,</span> <span class="n">yaw</span><span class="o">=</span><span class="n">yaw</span><span class="p">,</span> <span class="n">pitch</span><span class="o">=</span><span class="n">pitch</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Exporter.to_html">
+<a class="viewcode-back" href="../../../api.html#SimExporter.core.exporter.Exporter.to_html">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">background_color</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                <span class="n">grid_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="n">menu_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="n">frame_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export the current scene in a standalone HTML file.</span>
+
+<span class="sd">        :param filename: Name of the HTML file.</span>
+<span class="sd">        :param background_color: Color of the background in the 3D view.</span>
+<span class="sd">        :param grid_visible: If True, the reference grid is displayed.</span>
+<span class="sd">        :param menu_visible: If True, the menu panel is displayed.</span>
+<span class="sd">        :param frame_visible: If True, the reference frame is displayed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Set the background color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plt</span><span class="o">.</span><span class="n">background_color</span> <span class="o">=</span> <span class="n">convert_color</span><span class="p">(</span><span class="n">background_color</span><span class="p">)</span>
+
+        <span class="c1"># Get the directory that contains the javascript files and fill the standalone snapshot</span>
+        <span class="n">static_dir</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="s1">&#39;static&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">static_dir</span><span class="p">,</span> <span class="s1">&#39;snapshot_standalone.txt&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">static_dir</span><span class="p">,</span> <span class="s1">&#39;standalone.js&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[K3D_SOURCE]&#39;</span><span class="p">,</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">compress</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">()))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">static_dir</span><span class="p">,</span> <span class="s1">&#39;require.js&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[REQUIRE_JS]&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">static_dir</span><span class="p">,</span> <span class="s1">&#39;fflate.js&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[FFLATE_JS]&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[ADDITIONAL]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Get the scene snapshot</span>
+        <span class="n">snapshot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plt</span><span class="o">.</span><span class="n">get_binary_snapshot_objects</span><span class="p">()</span>
+
+        <span class="c1"># Update the plot parameters with the options</span>
+        <span class="n">plot_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plt</span><span class="o">.</span><span class="n">get_plot_params</span><span class="p">()</span>
+        <span class="n">plot_params</span><span class="p">[</span><span class="s1">&#39;menuVisibility&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">menu_visible</span>
+        <span class="n">plot_params</span><span class="p">[</span><span class="s1">&#39;gridVisible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_visible</span>
+        <span class="n">plot_params</span><span class="p">[</span><span class="s1">&#39;axesHelper&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span> <span class="k">if</span> <span class="n">frame_visible</span> <span class="k">else</span> <span class="mf">0.</span>
+        <span class="n">snapshot</span><span class="p">[</span><span class="s1">&#39;plot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_params</span>
+
+        <span class="c1"># Compress data and fill the standalone snapshot</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">compress</span><span class="p">(</span><span class="n">packb</span><span class="p">(</span><span class="n">snapshot</span><span class="p">,</span> <span class="n">use_bin_type</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="mi">9</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[DATA]&#39;</span><span class="p">,</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+        <span class="c1"># Write in the HTML file</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">.html&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.html&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">filename</span>
+        <span class="k">if</span> <span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">exists</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">)):</span>
+            <span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mimesis, Inria.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
