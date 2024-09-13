@@ -33,7 +33,7 @@ Install with *pip*
 
 .. code-block:: bash
 
-    pip install git+https://github.com/RobinEnjalbert/SimExporter.git
+    pip install git+https://github.com/mimesis-inria/SimExporter.git
 
 You should be able to run:
 
@@ -49,7 +49,7 @@ Install from sources
 
 .. code-block:: bash
 
-    git clone https://github.com/RobinEnjalbert/SimExporter.git
+    git clone https://github.com/mimesis-inria/SimExporter.git
     cd SimExporter
     pip install -e .
 

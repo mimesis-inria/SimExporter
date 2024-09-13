@@ -16,7 +16,7 @@ This HTML file can then be shared and opened in any browsers and laptop, it can 
 
 ## Gallery
 
-See the interactive gallery in the [**documentation**](https://robinenjalbert.github.io/SimExporter/) !
+See the interactive gallery in the [**documentation**](https://mimesis-inria.github.io/SimExporter/) !
 
 ![gallery](docs/src/_static/gallery.png)
 
@@ -29,10 +29,10 @@ Try an integrated animation on our [**team website**](https://mimesis.inria.fr/)
 
 ``` bash
 # Option 1 (USERS): install with pip
-$ pip install git+https://github.com/RobinEnjalbert/SimExporter.git
+$ pip install git+https://github.com/mimesis-inria/SimExporter.git
 
 # Option 2 (DEVS): install as editable
-$ git clone https://github.com/RobinEnjalbert/SimExporter.git
+$ git clone https://github.com/mimesis-inria/SimExporter.git
 $ cd SimExporter
 $ pip install -e .
 ```
@@ -77,9 +77,9 @@ exporter.to_html(filename='animation.html')
 ```
 
 To integrate the HTML file into a website or presentation slides, see the dedicated section in the 
-[**documentation**](https://robinenjalbert.github.io/SimExporter/).
+[**documentation**](https://mimesis-inria.github.io/SimExporter/).
 
 
 ## Documentation
 
-See more ⟶ [**documentation**](https://robinenjalbert.github.io/SimExporter/)
+See more ⟶ [**documentation**](https://mimesis-inria.github.io/SimExporter/)
